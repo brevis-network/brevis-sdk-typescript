@@ -4,11 +4,13 @@
     "description": "A Typescript SDK for interacting with the custom prover service and Brevis",
     "main": "index.ts",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "protoc": "sh ./scripts/protoc.sh"
     },
     "author": "Patrick Mao",
     "license": "MIT",
     "devDependencies": {
+        "@types/google-protobuf": "^3.15.12",
         "@typescript-eslint/eslint-plugin": "^6.21.0",
         "eslint": "^8.57.0",
         "eslint-config-prettier": "^9.1.0",
@@ -19,7 +21,8 @@
         "typescript": "^5.4.3"
     },
     "dependencies": {
+        "@grpc/grpc-js": "^1.10.4",
         "ethers": "^6.11.1",
-        "node-fetch": "^3.3.2"
+        "google-protobuf": "^3.21.2"
     }
 }
