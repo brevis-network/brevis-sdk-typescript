@@ -37,7 +37,7 @@ export class BrevisClient {
     private readonly client: GatewayClient;
 
     public constructor(url: string) {
-        const cred = credentials.createInsecure();
+        const cred = credentials.createSsl();
         this.client = new GatewayClient(url, cred);
     }
 
@@ -49,6 +49,7 @@ export class BrevisClient {
     ): Promise<SubmitResponse> {
         try {
             const res1 = await this.prepareQuery(request, proof, srcChainId, dstChainId);
+            console.log('brevis request id', res1.query_hash);
             await this.submitAppCircuitProof(res1.query_hash, dstChainId, proof.proof);
 
             return {
@@ -61,12 +62,12 @@ export class BrevisClient {
     }
 
     // wait untill the final proof is submitted on-chain and the app contract is called
-    public async wait(id: string): Promise<FinalResult> {
+    public async wait(id: string, dstChainId: number): Promise<FinalResult> {
         const interval = 10000;
         const count = 50;
 
         for (let i = 0; i < count; i++) {
-            const res = await this.getQueryStatus(id);
+            const res = await this.getQueryStatus(id, dstChainId);
             switch (res.status) {
                 case QueryStatus.QS_COMPLETE:
                     console.log(`request ${id} success, tx ${res.tx_hash}`);
@@ -82,7 +83,7 @@ export class BrevisClient {
                 default:
                     console.log(`request ${id} waiting for final tx`);
             }
-            await new Promise((resolve) => setTimeout(resolve, interval));
+            await new Promise(resolve => setTimeout(resolve, interval));
         }
         console.log(`request ${id} timed out after ${interval * count} seconds`);
         return { id, success: false };
@@ -97,9 +98,10 @@ export class BrevisClient {
         const req = new PrepareQueryRequest({
             chain_id: srcChainId,
             target_chain_id: dstChainId,
-            receipt_infos: request.getReceipts().map((r) => this.buildReceiptInfo(r.data)),
-            storage_query_infos: request.getStorages().map((s) => this.buildStorageInfo(s.data)),
-            transaction_infos: request.getTransactions().map((t) => this.buildTransactionInfo(t.data)),
+            receipt_infos: request.getReceipts().map(r => this.buildReceiptInfo(r.data)),
+            storage_query_infos: request.getStorages().map(s => this.buildStorageInfo(s.data)),
+            transaction_infos: request.getTransactions().map(t => this.buildTransactionInfo(t.data)),
+            use_app_circuit_info: true,
             app_circuit_info: proof.circuit_info,
         });
         const res = await this.client.PrepareQuery(req);
@@ -126,8 +128,8 @@ export class BrevisClient {
         return res;
     }
 
-    private async getQueryStatus(id: string): Promise<GetQueryStatusResponse> {
-        const req = new GetQueryStatusRequest({ query_hash: id });
+    private async getQueryStatus(id: string, dstChainId: number): Promise<GetQueryStatusResponse> {
+        const req = new GetQueryStatusRequest({ query_hash: id, target_chain_id: dstChainId });
         const res = await this.client.GetQueryStatus(req);
         if (res.has_err) {
             throw new Error(`error while waiting for final result: ${res.err.msg}`);
@@ -139,7 +141,7 @@ export class BrevisClient {
         return new ReceiptInfo({
             blk_num: data.block_num,
             transaction_hash: data.tx_hash,
-            log_extract_infos: data.fields.map((f) => {
+            log_extract_infos: data.fields.map(f => {
                 return new LogExtractInfo({
                     contract_address: f.contract,
                     log_index: f.log_index,

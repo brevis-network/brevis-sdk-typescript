@@ -9,7 +9,10 @@ import * as pb_1 from "google-protobuf";
 import * as grpc_1 from "@grpc/grpc-js";
 export enum ErrCode {
     ERROR_UNDEFINED = 0,
-    ERROR_DEFAULT = 1
+    ERROR_DEFAULT = 1,
+    ERROR_INVALID_INPUT = 2,
+    ERROR_INVALID_CUSTOM_INPUT = 3,
+    ERROR_FAILED_TO_PROVE = 4
 }
 export class ProveRequest extends pb_1.Message {
     #one_of_decls: number[][] = [];
