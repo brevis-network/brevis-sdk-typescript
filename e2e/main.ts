@@ -1,13 +1,13 @@
 import { ErrCode } from '../proto/sdk/prover';
 import { Field, ReceiptData, StorageData, TransactionData } from '../proto/sdk/types';
-import { BrevisClient } from '../src/brevis-client';
+import { BrevisClient as Brevis } from '../src/brevis-client';
 import { asBytes32, asInt248, asUint248, asUint521 } from '../src/circuit-types';
 import { Prover } from '../src/prover-client';
 import { ProofRequest } from '../src/request';
 
 async function main() {
     const prover = new Prover('localhost:33247');
-    const brevis = new BrevisClient('appsdk.brevis.network:11080');
+    const brevis = new Brevis('appsdk.brevis.network:11080');
 
     const proofReq = new ProofRequest();
     proofReq.addReceipt(
