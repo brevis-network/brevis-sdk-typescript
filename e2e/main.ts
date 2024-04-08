@@ -97,9 +97,6 @@ async function main() {
                 console.error('failed to prove:', err.msg);
                 // handle failed to prove case...
                 break;
-
-            default:
-                break;
         }
         return;
     }
