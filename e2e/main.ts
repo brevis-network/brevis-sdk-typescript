@@ -1,6 +1,6 @@
 import { ErrCode } from '../proto/sdk/prover';
 import { Field, ReceiptData, StorageData, TransactionData } from '../proto/sdk/types';
-import { BrevisClient as Brevis } from '../src/brevis-client';
+import { Brevis } from '../src/brevis-client';
 import { asBytes32, asInt248, asUint248, asUint521 } from '../src/circuit-types';
 import { Prover } from '../src/prover-client';
 import { ProofRequest } from '../src/request';

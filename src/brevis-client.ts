@@ -33,7 +33,7 @@ export interface FinalResult {
     success: boolean;
 }
 
-export class BrevisClient {
+export class Brevis {
     private readonly client: GatewayClient;
 
     public constructor(url: string) {
