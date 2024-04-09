@@ -6,7 +6,8 @@
     "scripts": {
         "test": "mocha --require ts-node/register src/**/*.spec.ts",
         "e2e": "ts-node e2e/main.ts",
-        "protoc": "sh ./scripts/protoc.sh"
+        "protoc": "sh ./scripts/protoc.sh",
+        "build": "tsup"
     },
     "author": "Patrick Mao",
     "license": "MIT",
@@ -22,6 +23,7 @@
         "eslint-plugin-promise": "^6.1.1",
         "mocha": "^10.4.0",
         "ts-node": "^10.9.2",
+        "tsup": "^8.0.2",
         "typescript": "^5.4.3"
     },
     "dependencies": {
