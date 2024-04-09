@@ -2,7 +2,9 @@
     "name": "brevis-sdk-typescript",
     "version": "0.0.1",
     "description": "A Typescript SDK for interacting with the custom prover service and Brevis",
-    "main": "src/index.ts",
+    "main": "./dist/index.js",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
     "scripts": {
         "test": "mocha --require ts-node/register src/**/*.spec.ts",
         "e2e": "ts-node e2e/main.ts",
