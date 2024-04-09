@@ -5,6 +5,11 @@
     "main": "./dist/index.js",
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
+    "files": [
+        "./src",
+        "./e2e",
+        "./dist"
+    ],
     "scripts": {
         "test": "mocha --require ts-node/register src/**/*.spec.ts",
         "e2e": "ts-node e2e/main.ts",
