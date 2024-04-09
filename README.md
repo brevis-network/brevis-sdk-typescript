@@ -1,7 +1,6 @@
-
 # Brevis SDK Typescript
 
-The Typescript SDK offers a way for NodeJS to interact with the prover service and Brevis' system.
+The Typescript SDK offers a way for NodeJS to interact with the prover service and Brevis' system. Go check out Brevis SDK's [documentation site](https://docs.brevis.network/) for more information.
 
 ## Workflow
 
@@ -206,4 +205,3 @@ Since Brevis calls your app contract's callback function when the final proof is
 ```typescript
 brevis.wait(brevisRes.id, 11155111);
 ```
-
