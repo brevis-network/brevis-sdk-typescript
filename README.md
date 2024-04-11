@@ -91,8 +91,9 @@ proofReq.addTransaction(
 
 #### Adding Custom Inputs
 
-```typescript
 If you define custom inputs for your circuit, you need to fully assign them here in ProofRequest.
+
+```typescript
 // circuit custom input definition
 type AppCircuit struct{
     // example custom field `MerkleProof`
