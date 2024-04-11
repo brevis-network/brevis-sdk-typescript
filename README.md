@@ -26,7 +26,7 @@ const proofReq = new ProofRequest();
 
 #### Adding Data to the Proof Request
 
-Adding data is almost a one-to-one copy of how you would add data to prove in the Go SDK. The data you add here is closely tied to how you allocate data slots for your circuit and is available in CircuitInput passed in to your Define function. how to write an application circuit
+Adding data is almost a one-to-one copy of how you would add data to prove in the Go SDK. The data you add here is closely tied to how you allocate data slots for your circuit and is available in CircuitInput passed in to your Define function.
 
 ```typescript
 proofReq.addReceipt(
