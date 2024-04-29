@@ -1,5 +1,11 @@
 import { credentials } from '@grpc/grpc-js';
-import { ProverClient, type ProveResponse } from '../proto/sdk/prover';
+import {
+    GetProofRequest,
+    GetProofResponse,
+    ProveAsyncResponse,
+    ProverClient,
+    type ProveResponse,
+} from '../proto/sdk/prover';
 import { type ProofRequest } from './request';
 
 export class Prover {
@@ -12,9 +18,16 @@ export class Prover {
 
     public async prove(request: ProofRequest): Promise<ProveResponse> {
         const res = await this.client.Prove(request.build());
-        if (res.has_err) {
-            throw new Error(`prover returned error: ${res.err.msg}`);
-        }
+        return res;
+    }
+
+    public async proveAsync(request: ProofRequest): Promise<ProveAsyncResponse> {
+        const res = await this.client.ProveAsync(request.build());
+        return res;
+    }
+
+    public async getProof(id: string): Promise<GetProofResponse> {
+        const res = await this.client.GetProof(new GetProofRequest({ proof_id: id }));
         return res;
     }
 }

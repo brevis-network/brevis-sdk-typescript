@@ -12,7 +12,7 @@
     ],
     "scripts": {
         "test": "mocha --require ts-node/register src/**/*.spec.ts",
-        "e2e": "ts-node e2e/main.ts",
+        "e2e": "ts-node e2e/prove-async.ts",
         "protoc": "sh ./scripts/protoc.sh",
         "build": "tsup"
     },
