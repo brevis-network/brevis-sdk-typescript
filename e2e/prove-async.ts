@@ -5,6 +5,10 @@ import { asBytes32, asInt248, asUint248, asUint521 } from '../src/circuit-types'
 import { Prover } from '../src/prover-client';
 import { ProofRequest } from '../src/request';
 
+function sleep(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 async function main() {
     const prover = new Prover('localhost:33247');
     const brevis = new Brevis('appsdk.brevis.network:11080');
@@ -78,10 +82,10 @@ async function main() {
         ],
     });
 
-    const proofRes = await prover.prove(proofReq);
+    const proveRes = await prover.proveAsync(proofReq);
     // error handling
-    if (proofRes.has_err) {
-        const err = proofRes.err;
+    if (proveRes.has_err) {
+        const err = proveRes.err;
         switch (err.code) {
             case ErrCode.ERROR_INVALID_INPUT:
                 console.error('invalid receipt/storage/transaction input:', err.msg);
@@ -92,23 +96,37 @@ async function main() {
                 console.error('invalid custom input:', err.msg);
                 // handle invalid custom input assignment...
                 break;
-
-            case ErrCode.ERROR_FAILED_TO_PROVE:
-                console.error('failed to prove:', err.msg);
-                // handle failed to prove case...
-                break;
         }
         return;
     }
-    console.log('proof', proofRes.proof);
 
-    try {
-        const brevisRes = await brevis.submit(proofReq, proofRes, 1, 11155111);
-        console.log('brevis res', brevisRes);
+    console.log('proof id', proveRes.proof_id);
 
-        brevis.wait(brevisRes.id, 11155111);
-    } catch (err) {
-        console.error(err);
+    const prepRes = await brevis.prepareQuery(proofReq, proveRes.circuit_info, 1, 11155111);
+    console.log('brevis query hash', prepRes.query_hash);
+
+    let proof = '';
+    for (let i = 0; i < 100; i++) {
+        const getProofRes = await prover.getProof(proveRes.proof_id);
+        if (getProofRes.has_err) {
+            console.error(proveRes.err.msg);
+            return;
+        }
+        if (getProofRes.proof) {
+            proof = getProofRes.proof;
+            console.log('proof', proof);
+            break;
+        }
+        console.log('waiting for proof...');
+        await sleep(3000);
+    }
+
+    await brevis.submitProof(prepRes.query_hash, 11155111, proof);
+    console.log('proof submitted to brevis');
+
+    const waitRes = await brevis.wait(prepRes.query_hash, 11155111);
+    if (waitRes.success) {
+        console.log('final tx', waitRes.tx);
     }
 }
 
