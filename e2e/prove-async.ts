@@ -102,6 +102,9 @@ async function main() {
 
     console.log('proof id', proveRes.proof_id);
 
+    const prepRes = await brevis.prepareQuery(proofReq, proveRes.circuit_info, 1, 11155111);
+    console.log('brevis query hash', prepRes.query_hash);
+
     let proof = '';
     for (let i = 0; i < 100; i++) {
         const getProofRes = await prover.getProof(proveRes.proof_id);
@@ -117,9 +120,6 @@ async function main() {
         console.log('waiting for proof...');
         await sleep(3000);
     }
-
-    const prepRes = await brevis.prepareQuery(proofReq, proveRes.circuit_info, 1, 11155111);
-    console.log('brevis query hash', prepRes.query_hash);
 
     await brevis.submitProof(prepRes.query_hash, 11155111, proof);
     console.log('proof submitted to brevis');
