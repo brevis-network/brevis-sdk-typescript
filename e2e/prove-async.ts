@@ -1,3 +1,4 @@
+import { QueryOption } from '../proto/brevis/gateway';
 import { ErrCode } from '../proto/sdk/prover';
 import { Field, ReceiptData, StorageData, TransactionData } from '../proto/sdk/types';
 import { Brevis } from '../src/brevis-client';
@@ -102,8 +103,8 @@ async function main() {
 
     console.log('proof id', proveRes.proof_id);
 
-    const prepRes = await brevis.prepareQuery(proofReq, proveRes.circuit_info, 1, 11155111);
-    console.log('brevis query hash', prepRes.query_hash);
+    const prepRes = await brevis.prepareQuery(proofReq, proveRes.circuit_info, 1, 11155111, QueryOption.ZK_MODE);
+    console.log('brevis query key', JSON.stringify(prepRes.query_key));
 
     let proof = '';
     for (let i = 0; i < 100; i++) {
@@ -121,10 +122,10 @@ async function main() {
         await sleep(3000);
     }
 
-    await brevis.submitProof(prepRes.query_hash, 11155111, proof);
+    await brevis.submitProof(prepRes.query_key, 11155111, proof);
     console.log('proof submitted to brevis');
 
-    const waitRes = await brevis.wait(prepRes.query_hash, 11155111);
+    const waitRes = await brevis.wait(prepRes.query_key, 11155111);
     if (waitRes.success) {
         console.log('final tx', waitRes.tx);
     }

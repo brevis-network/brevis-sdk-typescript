@@ -14,19 +14,21 @@ import { AppCircuitInfo } from '../proto/common/circuit_data';
 import { type ProveResponse } from '../proto/sdk/prover';
 import { type ReceiptData, type StorageData, type TransactionData } from './../proto/sdk/types';
 import { type ProofRequest } from './request';
+import { QueryKey, QueryOption } from '../proto/brevis/gateway';
 
 export interface SubmitResponse {
-    // the id of the request. use this id when calling BrevisRequest.sendRequest
+    // the query key of the request. use this query key when calling BrevisRequest.sendRequest
     // note that brevisId is not the same as the proof_id you get from calling your prover service.
-    brevisId: string;
+    // https://github.com/brevis-network/brevis-contracts/blob/3f4c704bc15771924ddf6d203292e227e58f597e/contracts/sdk/core/BrevisRequest.sol#L61-L67
+    queryKey: QueryKey;
 
     // amount of the fee to pay to BrevisRequest, in wei
     fee: string;
 }
 
 export interface FinalResult {
-    // the request id
-    brevisId: string;
+    // query key returned by prepareQuery request
+    queryKey: QueryKey;
 
     // the tx where the final proof is submitted on-chain and the app contract is called
     tx?: string;
@@ -48,19 +50,20 @@ export class Brevis {
         proof: ProveResponse,
         srcChainId: number,
         dstChainId: number,
+        option: QueryOption,
     ): Promise<SubmitResponse> {
-        const res1 = await this._prepareQuery(request, proof.circuit_info, srcChainId, dstChainId);
+        const res1 = await this._prepareQuery(request, proof.circuit_info, srcChainId, dstChainId,option);
         if (res1.has_err) {
             throw new Error(`failed to submit ${res1.err.msg}`);
         }
-        console.log('brevis request id', res1.query_hash);
-        const res2 = await this._submitProof(res1.query_hash, dstChainId, proof.proof);
+        console.log('brevis query key', JSON.stringify(res1.query_key));
+        const res2 = await this._submitProof(res1.query_key, dstChainId, proof.proof);
         if (res2.has_err) {
             throw new Error(`failed to submit ${res2.err.msg}`);
         }
 
         return {
-            brevisId: res1.query_hash,
+            queryKey: res1.query_key,
             fee: res1.fee,
         };
     }
@@ -70,40 +73,41 @@ export class Brevis {
         circuitInfo: AppCircuitInfo,
         srcChainId: number,
         dstChainId: number,
+        option: QueryOption,
     ): Promise<PrepareQueryResponse> {
-        return this._prepareQuery(request, circuitInfo, srcChainId, dstChainId);
+        return this._prepareQuery(request, circuitInfo, srcChainId, dstChainId, option);
     }
 
-    public async submitProof(id: string, dstChainId: number, proof: string) {
-        await this._submitProof(id, dstChainId, proof);
+    public async submitProof(queryKey: QueryKey, dstChainId: number, proof: string) {
+        await this._submitProof(queryKey, dstChainId, proof);
     }
 
     // wait untill the final proof is submitted on-chain and the app contract is called
-    public async wait(id: string, dstChainId: number): Promise<FinalResult> {
+    public async wait(queryKey: QueryKey, dstChainId: number): Promise<FinalResult> {
         const interval = 10000;
         const count = 50;
 
         for (let i = 0; i < count; i++) {
-            const res = await this.getQueryStatus(id, dstChainId);
+            const res = await this.getQueryStatus(queryKey, dstChainId);
             switch (res.status) {
                 case QueryStatus.QS_COMPLETE:
-                    console.log(`request ${id} success, tx ${res.tx_hash}`);
-                    return { brevisId: id, tx: res.tx_hash, success: true };
+                    console.log(`request query key ${JSON.stringify(queryKey)} success, tx ${res.tx_hash}`);
+                    return { queryKey: queryKey, tx: res.tx_hash, success: true };
                 case QueryStatus.QS_FAILED:
-                    console.log(`request ${id} failed`);
-                    return { brevisId: id, success: false };
+                    console.log(`request query key ${JSON.stringify(queryKey)} failed`);
+                    return { queryKey: queryKey, success: false };
                 case QueryStatus.QS_TO_BE_PAID:
                     console.log(
-                        `query ${id} waiting for payment. call BrevisRequest.sendRequest to initiate the payment`,
+                        `query ${JSON.stringify(queryKey)} waiting for payment. call BrevisRequest.sendRequest to initiate the payment`,
                     );
                     break;
                 default:
-                    console.log(`query ${id} waiting for final tx`);
+                    console.log(`query ${JSON.stringify(queryKey)} waiting for final tx`);
             }
             await new Promise(resolve => setTimeout(resolve, interval));
         }
-        console.log(`query ${id} timed out after ${interval * count} seconds`);
-        return { brevisId: id, success: false };
+        console.log(`query ${JSON.stringify(queryKey)} timed out after ${interval * count} seconds`);
+        return { queryKey: queryKey, success: false };
     }
 
     private async _prepareQuery(
@@ -111,6 +115,7 @@ export class Brevis {
         circuitInfo: AppCircuitInfo,
         srcChainId: number,
         dstChainId: number,
+        option: QueryOption
     ): Promise<PrepareQueryResponse> {
         const req = new PrepareQueryRequest({
             chain_id: srcChainId,
@@ -118,16 +123,16 @@ export class Brevis {
             receipt_infos: request.getReceipts().map(r => this.buildReceiptInfo(r.data)),
             storage_query_infos: request.getStorages().map(s => this.buildStorageInfo(s.data)),
             transaction_infos: request.getTransactions().map(t => this.buildTransactionInfo(t.data)),
-            use_app_circuit_info: true,
+            option: option, 
             app_circuit_info: circuitInfo,
         });
         const res = await this.client.PrepareQuery(req);
         return res;
     }
 
-    private async _submitProof(id: string, dstChainId: number, proof: string): Promise<SubmitAppCircuitProofResponse> {
+    private async _submitProof(query_key: QueryKey, dstChainId: number, proof: string): Promise<SubmitAppCircuitProofResponse> {
         const req = new SubmitAppCircuitProofRequest({
-            query_hash: id,
+            query_key: query_key,
             target_chain_id: dstChainId,
             proof,
         });
@@ -138,8 +143,8 @@ export class Brevis {
         return res;
     }
 
-    private async getQueryStatus(id: string, dstChainId: number): Promise<GetQueryStatusResponse> {
-        const req = new GetQueryStatusRequest({ query_hash: id, target_chain_id: dstChainId });
+    private async getQueryStatus(queryKey: QueryKey, dstChainId: number): Promise<GetQueryStatusResponse> {
+        const req = new GetQueryStatusRequest({ query_key: queryKey, target_chain_id: dstChainId });
         const res = await this.client.GetQueryStatus(req);
         if (res.has_err) {
             throw new Error(`error while waiting for final result: ${res.err.msg}`);

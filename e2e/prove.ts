@@ -1,3 +1,4 @@
+import { QueryOption } from '../proto/brevis/gateway';
 import { ErrCode } from '../proto/sdk/prover';
 import { Field, ReceiptData, StorageData, TransactionData } from '../proto/sdk/types';
 import { Brevis } from '../src/brevis-client';
@@ -103,10 +104,10 @@ async function main() {
     console.log('proof', proofRes.proof);
 
     try {
-        const brevisRes = await brevis.submit(proofReq, proofRes, 1, 11155111);
+        const brevisRes = await brevis.submit(proofReq, proofRes, 1, 11155111, QueryOption.ZK_MODE);
         console.log('brevis res', brevisRes);
 
-        brevis.wait(brevisRes.brevisId, 11155111);
+        brevis.wait(brevisRes.queryKey, 11155111);
     } catch (err) {
         console.error(err);
     }
