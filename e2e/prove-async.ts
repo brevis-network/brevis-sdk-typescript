@@ -12,7 +12,7 @@ function sleep(ms: number) {
 
 async function main() {
     const prover = new Prover('localhost:33247');
-    const brevis = new Brevis('appsdk.brevis.network:11080');
+    const brevis = new Brevis('appsdkv2.brevis.network:9094');
 
     const proofReq = new ProofRequest();
     proofReq.addReceipt(
