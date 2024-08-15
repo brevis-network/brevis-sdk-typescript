@@ -185,6 +185,7 @@ export class Brevis {
                 }),
             })],
             option: option,
+            api_key: apiKey,
         })
 
         const res = await this.client.SendBatchQueries(req);
