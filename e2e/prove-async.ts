@@ -103,7 +103,7 @@ async function main() {
 
     console.log('proof id', proveRes.proof_id);
 
-    const prepRes = await brevis.prepareQuery(proofReq, proveRes.circuit_info, 1, 11155111, QueryOption.ZK_MODE);
+    const prepRes = await brevis.prepareQuery(proofReq, proveRes.circuit_info, 1, 11155111, QueryOption.ZK_MODE, "", "");
     console.log('brevis query key', JSON.stringify(prepRes.query_key));
 
     let proof = '';

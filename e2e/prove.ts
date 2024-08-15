@@ -104,7 +104,7 @@ async function main() {
     console.log('proof', proofRes.proof);
 
     try {
-        const brevisRes = await brevis.submit(proofReq, proofRes, 1, 11155111, QueryOption.ZK_MODE);
+        const brevisRes = await brevis.submit(proofReq, proofRes, 1, 11155111, QueryOption.ZK_MODE, "", "");
         console.log('brevis res', brevisRes);
 
         brevis.wait(brevisRes.queryKey, 11155111);

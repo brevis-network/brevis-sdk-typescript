@@ -14,6 +14,7 @@ export class AppCircuitInfo extends pb_1.Message {
         toggles?: boolean[];
         use_callback?: boolean;
         output?: string;
+        vk_hash?: string;
     }) {
         super();
         pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [3, 5], this.#one_of_decls);
@@ -38,6 +39,9 @@ export class AppCircuitInfo extends pb_1.Message {
             }
             if ("output" in data && data.output != undefined) {
                 this.output = data.output;
+            }
+            if ("vk_hash" in data && data.vk_hash != undefined) {
+                this.vk_hash = data.vk_hash;
             }
         }
     }
@@ -83,6 +87,12 @@ export class AppCircuitInfo extends pb_1.Message {
     set output(value: string) {
         pb_1.Message.setField(this, 7, value);
     }
+    get vk_hash() {
+        return pb_1.Message.getFieldWithDefault(this, 8, "") as string;
+    }
+    set vk_hash(value: string) {
+        pb_1.Message.setField(this, 8, value);
+    }
     static fromObject(data: {
         output_commitment?: string;
         vk?: string;
@@ -91,6 +101,7 @@ export class AppCircuitInfo extends pb_1.Message {
         toggles?: boolean[];
         use_callback?: boolean;
         output?: string;
+        vk_hash?: string;
     }): AppCircuitInfo {
         const message = new AppCircuitInfo({});
         if (data.output_commitment != null) {
@@ -114,6 +125,9 @@ export class AppCircuitInfo extends pb_1.Message {
         if (data.output != null) {
             message.output = data.output;
         }
+        if (data.vk_hash != null) {
+            message.vk_hash = data.vk_hash;
+        }
         return message;
     }
     toObject() {
@@ -125,6 +139,7 @@ export class AppCircuitInfo extends pb_1.Message {
             toggles?: boolean[];
             use_callback?: boolean;
             output?: string;
+            vk_hash?: string;
         } = {};
         if (this.output_commitment != null) {
             data.output_commitment = this.output_commitment;
@@ -147,6 +162,9 @@ export class AppCircuitInfo extends pb_1.Message {
         if (this.output != null) {
             data.output = this.output;
         }
+        if (this.vk_hash != null) {
+            data.vk_hash = this.vk_hash;
+        }
         return data;
     }
     serialize(): Uint8Array;
@@ -167,6 +185,8 @@ export class AppCircuitInfo extends pb_1.Message {
             writer.writeBool(6, this.use_callback);
         if (this.output.length)
             writer.writeString(7, this.output);
+        if (this.vk_hash.length)
+            writer.writeString(8, this.vk_hash);
         if (!w)
             return writer.getResultBuffer();
     }
@@ -196,6 +216,9 @@ export class AppCircuitInfo extends pb_1.Message {
                     break;
                 case 7:
                     message.output = reader.readString();
+                    break;
+                case 8:
+                    message.vk_hash = reader.readString();
                     break;
                 default: reader.skipField();
             }

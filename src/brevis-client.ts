@@ -3,14 +3,17 @@ import {
     GatewayClient,
     GetQueryStatusRequest,
     PrepareQueryRequest,
+    PrepareQueryResponse,
+    ErrMsg,
     QueryStatus,
     SubmitAppCircuitProofRequest,
     type GetQueryStatusResponse,
-    type PrepareQueryResponse,
     type SubmitAppCircuitProofResponse,
+    SendBatchQueriesRequest,
+    Query,
 } from '../proto/brevis/gateway';
 import { LogExtractInfo, ReceiptInfo, StorageQueryInfo, TransactionInfo } from '../proto/brevis/types';
-import { AppCircuitInfo } from '../proto/common/circuit_data';
+import { AppCircuitInfo, AppCirucitInfoWithProof } from '../proto/common/circuit_data';
 import { type ProveResponse } from '../proto/sdk/prover';
 import { type ReceiptData, type StorageData, type TransactionData } from './../proto/sdk/types';
 import { type ProofRequest } from './request';
@@ -51,8 +54,10 @@ export class Brevis {
         srcChainId: number,
         dstChainId: number,
         option: QueryOption,
+        apiKey: string,
+        callbackAddress: string,
     ): Promise<SubmitResponse> {
-        const res1 = await this._prepareQuery(request, proof.circuit_info, srcChainId, dstChainId,option);
+        const res1 = await this._prepareQuery(request, proof.circuit_info, srcChainId, dstChainId,option, apiKey, callbackAddress);
         if (res1.has_err) {
             throw new Error(`failed to submit ${res1.err.msg}`);
         }
@@ -74,8 +79,10 @@ export class Brevis {
         srcChainId: number,
         dstChainId: number,
         option: QueryOption,
+        apiKey: string,
+        callbackAddress: string,
     ): Promise<PrepareQueryResponse> {
-        return this._prepareQuery(request, circuitInfo, srcChainId, dstChainId, option);
+        return this._prepareQuery(request, circuitInfo, srcChainId, dstChainId, option, apiKey, callbackAddress);
     }
 
     public async submitProof(queryKey: QueryKey, dstChainId: number, proof: string) {
@@ -115,8 +122,21 @@ export class Brevis {
         circuitInfo: AppCircuitInfo,
         srcChainId: number,
         dstChainId: number,
-        option: QueryOption
+        option: QueryOption,
+        apiKey: string,
+        callbackAddress: string 
     ): Promise<PrepareQueryResponse> {
+        if (apiKey.length > 0) {
+            return this._prepareQueryForBrevisPartnerFlow(
+                request,
+                circuitInfo,
+                srcChainId,
+                dstChainId,
+                option,
+                apiKey,
+                callbackAddress, 
+            )
+        }
         const req = new PrepareQueryRequest({
             chain_id: srcChainId,
             target_chain_id: dstChainId,
@@ -128,6 +148,65 @@ export class Brevis {
         });
         const res = await this.client.PrepareQuery(req);
         return res;
+    }
+
+    private async _prepareQueryForBrevisPartnerFlow(
+        request: ProofRequest,
+        circuitInfo: AppCircuitInfo,
+        srcChainId: number,
+        dstChainId: number,
+        option: QueryOption,
+        apiKey: string,
+        callbackAddress: string 
+    ): Promise<PrepareQueryResponse> {
+        if (callbackAddress.length == 0) {
+            return new PrepareQueryResponse({
+                err: new ErrMsg({
+                    msg: "brevis partner flow needs callback address",
+                })
+            })
+        }
+
+        const req = new SendBatchQueriesRequest({
+            chain_id: srcChainId,
+            target_chain_id: dstChainId,
+            queries: [new Query({
+                receipt_infos: request.getReceipts().map(r => this.buildReceiptInfo(r.data)),
+                storage_query_infos: request.getStorages().map(s => this.buildStorageInfo(s.data)),
+                transaction_infos: request.getTransactions().map(t => this.buildTransactionInfo(t.data)),
+                app_circuit_info: new AppCirucitInfoWithProof({
+                    output_commitment: circuitInfo.output_commitment,
+                    vk_hash: circuitInfo.vk_hash,
+                    input_commitments: circuitInfo.input_commitments,
+                    toggles_commitment: circuitInfo.toggles_commitment,
+                    toggles: circuitInfo.toggles,
+                    output: circuitInfo.output,
+                    callback_addr: callbackAddress,
+                }),
+            })],
+            option: option,
+        })
+
+        const res = await this.client.SendBatchQueries(req);
+        if (res.has_err) {
+            return new PrepareQueryResponse({
+                err: new ErrMsg({
+                    msg: `failed to prepare query for brevis partner flow: ${res.err.msg} ` ,
+                })
+            })
+        }
+        if (res.query_keys.length == 0) {
+            return new PrepareQueryResponse({
+                err: new ErrMsg({
+                    msg: `empty query info for brevis partner flow: ${res.err.msg} ` ,
+                })
+            })
+        }
+
+        return new PrepareQueryResponse({
+            query_key: res.query_keys[0],
+            fee: res.fee,
+        })
     }
 
     private async _submitProof(query_key: QueryKey, dstChainId: number, proof: string): Promise<SubmitAppCircuitProofResponse> {
