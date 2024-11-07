@@ -10,11 +10,18 @@ export class AppCircuitInfo extends pb_1.Message {
         output_commitment?: string;
         vk?: string;
         input_commitments?: string[];
+        /** @deprecated*/
         toggles_commitment?: string;
         toggles?: boolean[];
         use_callback?: boolean;
         output?: string;
         vk_hash?: string;
+        input_commitments_root?: string;
+        witness?: string;
+        max_receipts?: number;
+        max_storage?: number;
+        max_tx?: number;
+        max_num_data_points?: number;
     }) {
         super();
         pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [3, 5], this.#one_of_decls);
@@ -43,6 +50,24 @@ export class AppCircuitInfo extends pb_1.Message {
             if ("vk_hash" in data && data.vk_hash != undefined) {
                 this.vk_hash = data.vk_hash;
             }
+            if ("input_commitments_root" in data && data.input_commitments_root != undefined) {
+                this.input_commitments_root = data.input_commitments_root;
+            }
+            if ("witness" in data && data.witness != undefined) {
+                this.witness = data.witness;
+            }
+            if ("max_receipts" in data && data.max_receipts != undefined) {
+                this.max_receipts = data.max_receipts;
+            }
+            if ("max_storage" in data && data.max_storage != undefined) {
+                this.max_storage = data.max_storage;
+            }
+            if ("max_tx" in data && data.max_tx != undefined) {
+                this.max_tx = data.max_tx;
+            }
+            if ("max_num_data_points" in data && data.max_num_data_points != undefined) {
+                this.max_num_data_points = data.max_num_data_points;
+            }
         }
     }
     get output_commitment() {
@@ -63,9 +88,11 @@ export class AppCircuitInfo extends pb_1.Message {
     set input_commitments(value: string[]) {
         pb_1.Message.setField(this, 3, value);
     }
+    /** @deprecated*/
     get toggles_commitment() {
         return pb_1.Message.getFieldWithDefault(this, 4, "") as string;
     }
+    /** @deprecated*/
     set toggles_commitment(value: string) {
         pb_1.Message.setField(this, 4, value);
     }
@@ -93,6 +120,42 @@ export class AppCircuitInfo extends pb_1.Message {
     set vk_hash(value: string) {
         pb_1.Message.setField(this, 8, value);
     }
+    get input_commitments_root() {
+        return pb_1.Message.getFieldWithDefault(this, 9, "") as string;
+    }
+    set input_commitments_root(value: string) {
+        pb_1.Message.setField(this, 9, value);
+    }
+    get witness() {
+        return pb_1.Message.getFieldWithDefault(this, 10, "") as string;
+    }
+    set witness(value: string) {
+        pb_1.Message.setField(this, 10, value);
+    }
+    get max_receipts() {
+        return pb_1.Message.getFieldWithDefault(this, 11, 0) as number;
+    }
+    set max_receipts(value: number) {
+        pb_1.Message.setField(this, 11, value);
+    }
+    get max_storage() {
+        return pb_1.Message.getFieldWithDefault(this, 12, 0) as number;
+    }
+    set max_storage(value: number) {
+        pb_1.Message.setField(this, 12, value);
+    }
+    get max_tx() {
+        return pb_1.Message.getFieldWithDefault(this, 13, 0) as number;
+    }
+    set max_tx(value: number) {
+        pb_1.Message.setField(this, 13, value);
+    }
+    get max_num_data_points() {
+        return pb_1.Message.getFieldWithDefault(this, 14, 0) as number;
+    }
+    set max_num_data_points(value: number) {
+        pb_1.Message.setField(this, 14, value);
+    }
     static fromObject(data: {
         output_commitment?: string;
         vk?: string;
@@ -102,6 +165,12 @@ export class AppCircuitInfo extends pb_1.Message {
         use_callback?: boolean;
         output?: string;
         vk_hash?: string;
+        input_commitments_root?: string;
+        witness?: string;
+        max_receipts?: number;
+        max_storage?: number;
+        max_tx?: number;
+        max_num_data_points?: number;
     }): AppCircuitInfo {
         const message = new AppCircuitInfo({});
         if (data.output_commitment != null) {
@@ -128,6 +197,24 @@ export class AppCircuitInfo extends pb_1.Message {
         if (data.vk_hash != null) {
             message.vk_hash = data.vk_hash;
         }
+        if (data.input_commitments_root != null) {
+            message.input_commitments_root = data.input_commitments_root;
+        }
+        if (data.witness != null) {
+            message.witness = data.witness;
+        }
+        if (data.max_receipts != null) {
+            message.max_receipts = data.max_receipts;
+        }
+        if (data.max_storage != null) {
+            message.max_storage = data.max_storage;
+        }
+        if (data.max_tx != null) {
+            message.max_tx = data.max_tx;
+        }
+        if (data.max_num_data_points != null) {
+            message.max_num_data_points = data.max_num_data_points;
+        }
         return message;
     }
     toObject() {
@@ -140,6 +227,12 @@ export class AppCircuitInfo extends pb_1.Message {
             use_callback?: boolean;
             output?: string;
             vk_hash?: string;
+            input_commitments_root?: string;
+            witness?: string;
+            max_receipts?: number;
+            max_storage?: number;
+            max_tx?: number;
+            max_num_data_points?: number;
         } = {};
         if (this.output_commitment != null) {
             data.output_commitment = this.output_commitment;
@@ -165,6 +258,24 @@ export class AppCircuitInfo extends pb_1.Message {
         if (this.vk_hash != null) {
             data.vk_hash = this.vk_hash;
         }
+        if (this.input_commitments_root != null) {
+            data.input_commitments_root = this.input_commitments_root;
+        }
+        if (this.witness != null) {
+            data.witness = this.witness;
+        }
+        if (this.max_receipts != null) {
+            data.max_receipts = this.max_receipts;
+        }
+        if (this.max_storage != null) {
+            data.max_storage = this.max_storage;
+        }
+        if (this.max_tx != null) {
+            data.max_tx = this.max_tx;
+        }
+        if (this.max_num_data_points != null) {
+            data.max_num_data_points = this.max_num_data_points;
+        }
         return data;
     }
     serialize(): Uint8Array;
@@ -187,6 +298,18 @@ export class AppCircuitInfo extends pb_1.Message {
             writer.writeString(7, this.output);
         if (this.vk_hash.length)
             writer.writeString(8, this.vk_hash);
+        if (this.input_commitments_root.length)
+            writer.writeString(9, this.input_commitments_root);
+        if (this.witness.length)
+            writer.writeString(10, this.witness);
+        if (this.max_receipts != 0)
+            writer.writeUint32(11, this.max_receipts);
+        if (this.max_storage != 0)
+            writer.writeUint32(12, this.max_storage);
+        if (this.max_tx != 0)
+            writer.writeUint32(13, this.max_tx);
+        if (this.max_num_data_points != 0)
+            writer.writeUint32(14, this.max_num_data_points);
         if (!w)
             return writer.getResultBuffer();
     }
@@ -220,6 +343,24 @@ export class AppCircuitInfo extends pb_1.Message {
                 case 8:
                     message.vk_hash = reader.readString();
                     break;
+                case 9:
+                    message.input_commitments_root = reader.readString();
+                    break;
+                case 10:
+                    message.witness = reader.readString();
+                    break;
+                case 11:
+                    message.max_receipts = reader.readUint32();
+                    break;
+                case 12:
+                    message.max_storage = reader.readUint32();
+                    break;
+                case 13:
+                    message.max_tx = reader.readUint32();
+                    break;
+                case 14:
+                    message.max_num_data_points = reader.readUint32();
+                    break;
                 default: reader.skipField();
             }
         }
@@ -232,17 +373,24 @@ export class AppCircuitInfo extends pb_1.Message {
         return AppCircuitInfo.deserialize(bytes);
     }
 }
-export class AppCirucitInfoWithProof extends pb_1.Message {
+export class AppCircuitInfoWithProof extends pb_1.Message {
     #one_of_decls: number[][] = [];
     constructor(data?: any[] | {
         output_commitment?: string;
         vk_hash?: string;
         input_commitments?: string[];
+        /** @deprecated*/
         toggles_commitment?: string;
         toggles?: boolean[];
         output?: string;
         proof?: string;
         callback_addr?: string;
+        input_commitments_root?: string;
+        witness?: string;
+        max_receipts?: number;
+        max_storage?: number;
+        max_tx?: number;
+        max_num_data_points?: number;
     }) {
         super();
         pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [3, 5], this.#one_of_decls);
@@ -271,6 +419,24 @@ export class AppCirucitInfoWithProof extends pb_1.Message {
             if ("callback_addr" in data && data.callback_addr != undefined) {
                 this.callback_addr = data.callback_addr;
             }
+            if ("input_commitments_root" in data && data.input_commitments_root != undefined) {
+                this.input_commitments_root = data.input_commitments_root;
+            }
+            if ("witness" in data && data.witness != undefined) {
+                this.witness = data.witness;
+            }
+            if ("max_receipts" in data && data.max_receipts != undefined) {
+                this.max_receipts = data.max_receipts;
+            }
+            if ("max_storage" in data && data.max_storage != undefined) {
+                this.max_storage = data.max_storage;
+            }
+            if ("max_tx" in data && data.max_tx != undefined) {
+                this.max_tx = data.max_tx;
+            }
+            if ("max_num_data_points" in data && data.max_num_data_points != undefined) {
+                this.max_num_data_points = data.max_num_data_points;
+            }
         }
     }
     get output_commitment() {
@@ -291,9 +457,11 @@ export class AppCirucitInfoWithProof extends pb_1.Message {
     set input_commitments(value: string[]) {
         pb_1.Message.setField(this, 3, value);
     }
+    /** @deprecated*/
     get toggles_commitment() {
         return pb_1.Message.getFieldWithDefault(this, 4, "") as string;
     }
+    /** @deprecated*/
     set toggles_commitment(value: string) {
         pb_1.Message.setField(this, 4, value);
     }
@@ -321,6 +489,42 @@ export class AppCirucitInfoWithProof extends pb_1.Message {
     set callback_addr(value: string) {
         pb_1.Message.setField(this, 8, value);
     }
+    get input_commitments_root() {
+        return pb_1.Message.getFieldWithDefault(this, 9, "") as string;
+    }
+    set input_commitments_root(value: string) {
+        pb_1.Message.setField(this, 9, value);
+    }
+    get witness() {
+        return pb_1.Message.getFieldWithDefault(this, 10, "") as string;
+    }
+    set witness(value: string) {
+        pb_1.Message.setField(this, 10, value);
+    }
+    get max_receipts() {
+        return pb_1.Message.getFieldWithDefault(this, 11, 0) as number;
+    }
+    set max_receipts(value: number) {
+        pb_1.Message.setField(this, 11, value);
+    }
+    get max_storage() {
+        return pb_1.Message.getFieldWithDefault(this, 12, 0) as number;
+    }
+    set max_storage(value: number) {
+        pb_1.Message.setField(this, 12, value);
+    }
+    get max_tx() {
+        return pb_1.Message.getFieldWithDefault(this, 13, 0) as number;
+    }
+    set max_tx(value: number) {
+        pb_1.Message.setField(this, 13, value);
+    }
+    get max_num_data_points() {
+        return pb_1.Message.getFieldWithDefault(this, 14, 0) as number;
+    }
+    set max_num_data_points(value: number) {
+        pb_1.Message.setField(this, 14, value);
+    }
     static fromObject(data: {
         output_commitment?: string;
         vk_hash?: string;
@@ -330,8 +534,14 @@ export class AppCirucitInfoWithProof extends pb_1.Message {
         output?: string;
         proof?: string;
         callback_addr?: string;
-    }): AppCirucitInfoWithProof {
-        const message = new AppCirucitInfoWithProof({});
+        input_commitments_root?: string;
+        witness?: string;
+        max_receipts?: number;
+        max_storage?: number;
+        max_tx?: number;
+        max_num_data_points?: number;
+    }): AppCircuitInfoWithProof {
+        const message = new AppCircuitInfoWithProof({});
         if (data.output_commitment != null) {
             message.output_commitment = data.output_commitment;
         }
@@ -356,6 +566,24 @@ export class AppCirucitInfoWithProof extends pb_1.Message {
         if (data.callback_addr != null) {
             message.callback_addr = data.callback_addr;
         }
+        if (data.input_commitments_root != null) {
+            message.input_commitments_root = data.input_commitments_root;
+        }
+        if (data.witness != null) {
+            message.witness = data.witness;
+        }
+        if (data.max_receipts != null) {
+            message.max_receipts = data.max_receipts;
+        }
+        if (data.max_storage != null) {
+            message.max_storage = data.max_storage;
+        }
+        if (data.max_tx != null) {
+            message.max_tx = data.max_tx;
+        }
+        if (data.max_num_data_points != null) {
+            message.max_num_data_points = data.max_num_data_points;
+        }
         return message;
     }
     toObject() {
@@ -368,6 +596,12 @@ export class AppCirucitInfoWithProof extends pb_1.Message {
             output?: string;
             proof?: string;
             callback_addr?: string;
+            input_commitments_root?: string;
+            witness?: string;
+            max_receipts?: number;
+            max_storage?: number;
+            max_tx?: number;
+            max_num_data_points?: number;
         } = {};
         if (this.output_commitment != null) {
             data.output_commitment = this.output_commitment;
@@ -393,6 +627,24 @@ export class AppCirucitInfoWithProof extends pb_1.Message {
         if (this.callback_addr != null) {
             data.callback_addr = this.callback_addr;
         }
+        if (this.input_commitments_root != null) {
+            data.input_commitments_root = this.input_commitments_root;
+        }
+        if (this.witness != null) {
+            data.witness = this.witness;
+        }
+        if (this.max_receipts != null) {
+            data.max_receipts = this.max_receipts;
+        }
+        if (this.max_storage != null) {
+            data.max_storage = this.max_storage;
+        }
+        if (this.max_tx != null) {
+            data.max_tx = this.max_tx;
+        }
+        if (this.max_num_data_points != null) {
+            data.max_num_data_points = this.max_num_data_points;
+        }
         return data;
     }
     serialize(): Uint8Array;
@@ -415,11 +667,23 @@ export class AppCirucitInfoWithProof extends pb_1.Message {
             writer.writeString(7, this.proof);
         if (this.callback_addr.length)
             writer.writeString(8, this.callback_addr);
+        if (this.input_commitments_root.length)
+            writer.writeString(9, this.input_commitments_root);
+        if (this.witness.length)
+            writer.writeString(10, this.witness);
+        if (this.max_receipts != 0)
+            writer.writeUint32(11, this.max_receipts);
+        if (this.max_storage != 0)
+            writer.writeUint32(12, this.max_storage);
+        if (this.max_tx != 0)
+            writer.writeUint32(13, this.max_tx);
+        if (this.max_num_data_points != 0)
+            writer.writeUint32(14, this.max_num_data_points);
         if (!w)
             return writer.getResultBuffer();
     }
-    static deserialize(bytes: Uint8Array | pb_1.BinaryReader): AppCirucitInfoWithProof {
-        const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new AppCirucitInfoWithProof();
+    static deserialize(bytes: Uint8Array | pb_1.BinaryReader): AppCircuitInfoWithProof {
+        const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new AppCircuitInfoWithProof();
         while (reader.nextField()) {
             if (reader.isEndGroup())
                 break;
@@ -448,6 +712,24 @@ export class AppCirucitInfoWithProof extends pb_1.Message {
                 case 8:
                     message.callback_addr = reader.readString();
                     break;
+                case 9:
+                    message.input_commitments_root = reader.readString();
+                    break;
+                case 10:
+                    message.witness = reader.readString();
+                    break;
+                case 11:
+                    message.max_receipts = reader.readUint32();
+                    break;
+                case 12:
+                    message.max_storage = reader.readUint32();
+                    break;
+                case 13:
+                    message.max_tx = reader.readUint32();
+                    break;
+                case 14:
+                    message.max_num_data_points = reader.readUint32();
+                    break;
                 default: reader.skipField();
             }
         }
@@ -456,7 +738,7 @@ export class AppCirucitInfoWithProof extends pb_1.Message {
     serializeBinary(): Uint8Array {
         return this.serialize();
     }
-    static deserializeBinary(bytes: Uint8Array): AppCirucitInfoWithProof {
-        return AppCirucitInfoWithProof.deserialize(bytes);
+    static deserializeBinary(bytes: Uint8Array): AppCircuitInfoWithProof {
+        return AppCircuitInfoWithProof.deserialize(bytes);
     }
 }

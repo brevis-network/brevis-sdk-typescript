@@ -141,6 +141,8 @@ export class PrepareQueryRequest extends pb_1.Message {
         app_circuit_info?: dependency_2.AppCircuitInfo;
         target_chain_id?: number;
         option?: QueryOption;
+        /** @deprecated*/
+        use_plonky2?: boolean;
     }) {
         super();
         pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [2, 3, 4], this.#one_of_decls);
@@ -165,6 +167,9 @@ export class PrepareQueryRequest extends pb_1.Message {
             }
             if ("option" in data && data.option != undefined) {
                 this.option = data.option;
+            }
+            if ("use_plonky2" in data && data.use_plonky2 != undefined) {
+                this.use_plonky2 = data.use_plonky2;
             }
         }
     }
@@ -213,6 +218,14 @@ export class PrepareQueryRequest extends pb_1.Message {
     set option(value: QueryOption) {
         pb_1.Message.setField(this, 7, value);
     }
+    /** @deprecated*/
+    get use_plonky2() {
+        return pb_1.Message.getFieldWithDefault(this, 8, false) as boolean;
+    }
+    /** @deprecated*/
+    set use_plonky2(value: boolean) {
+        pb_1.Message.setField(this, 8, value);
+    }
     static fromObject(data: {
         chain_id?: number;
         receipt_infos?: ReturnType<typeof dependency_1.ReceiptInfo.prototype.toObject>[];
@@ -221,6 +234,7 @@ export class PrepareQueryRequest extends pb_1.Message {
         app_circuit_info?: ReturnType<typeof dependency_2.AppCircuitInfo.prototype.toObject>;
         target_chain_id?: number;
         option?: QueryOption;
+        use_plonky2?: boolean;
     }): PrepareQueryRequest {
         const message = new PrepareQueryRequest({});
         if (data.chain_id != null) {
@@ -244,6 +258,9 @@ export class PrepareQueryRequest extends pb_1.Message {
         if (data.option != null) {
             message.option = data.option;
         }
+        if (data.use_plonky2 != null) {
+            message.use_plonky2 = data.use_plonky2;
+        }
         return message;
     }
     toObject() {
@@ -255,6 +272,7 @@ export class PrepareQueryRequest extends pb_1.Message {
             app_circuit_info?: ReturnType<typeof dependency_2.AppCircuitInfo.prototype.toObject>;
             target_chain_id?: number;
             option?: QueryOption;
+            use_plonky2?: boolean;
         } = {};
         if (this.chain_id != null) {
             data.chain_id = this.chain_id;
@@ -277,6 +295,9 @@ export class PrepareQueryRequest extends pb_1.Message {
         if (this.option != null) {
             data.option = this.option;
         }
+        if (this.use_plonky2 != null) {
+            data.use_plonky2 = this.use_plonky2;
+        }
         return data;
     }
     serialize(): Uint8Array;
@@ -297,6 +318,8 @@ export class PrepareQueryRequest extends pb_1.Message {
             writer.writeUint64(6, this.target_chain_id);
         if (this.option != QueryOption.ZK_MODE)
             writer.writeEnum(7, this.option);
+        if (this.use_plonky2 != false)
+            writer.writeBool(8, this.use_plonky2);
         if (!w)
             return writer.getResultBuffer();
     }
@@ -326,6 +349,9 @@ export class PrepareQueryRequest extends pb_1.Message {
                     break;
                 case 7:
                     message.option = reader.readEnum();
+                    break;
+                case 8:
+                    message.use_plonky2 = reader.readBool();
                     break;
                 default: reader.skipField();
             }
@@ -766,6 +792,9 @@ export class GetQueryStatusResponse extends pb_1.Message {
         err?: ErrMsg;
         status?: QueryStatus;
         tx_hash?: string;
+        proof?: string;
+        proof_data?: ProofData;
+        circuit_output?: string;
     }) {
         super();
         pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
@@ -778,6 +807,15 @@ export class GetQueryStatusResponse extends pb_1.Message {
             }
             if ("tx_hash" in data && data.tx_hash != undefined) {
                 this.tx_hash = data.tx_hash;
+            }
+            if ("proof" in data && data.proof != undefined) {
+                this.proof = data.proof;
+            }
+            if ("proof_data" in data && data.proof_data != undefined) {
+                this.proof_data = data.proof_data;
+            }
+            if ("circuit_output" in data && data.circuit_output != undefined) {
+                this.circuit_output = data.circuit_output;
             }
         }
     }
@@ -802,10 +840,34 @@ export class GetQueryStatusResponse extends pb_1.Message {
     set tx_hash(value: string) {
         pb_1.Message.setField(this, 3, value);
     }
+    get proof() {
+        return pb_1.Message.getFieldWithDefault(this, 4, "") as string;
+    }
+    set proof(value: string) {
+        pb_1.Message.setField(this, 4, value);
+    }
+    get proof_data() {
+        return pb_1.Message.getWrapperField(this, ProofData, 5) as ProofData;
+    }
+    set proof_data(value: ProofData) {
+        pb_1.Message.setWrapperField(this, 5, value);
+    }
+    get has_proof_data() {
+        return pb_1.Message.getField(this, 5) != null;
+    }
+    get circuit_output() {
+        return pb_1.Message.getFieldWithDefault(this, 6, "") as string;
+    }
+    set circuit_output(value: string) {
+        pb_1.Message.setField(this, 6, value);
+    }
     static fromObject(data: {
         err?: ReturnType<typeof ErrMsg.prototype.toObject>;
         status?: QueryStatus;
         tx_hash?: string;
+        proof?: string;
+        proof_data?: ReturnType<typeof ProofData.prototype.toObject>;
+        circuit_output?: string;
     }): GetQueryStatusResponse {
         const message = new GetQueryStatusResponse({});
         if (data.err != null) {
@@ -817,6 +879,15 @@ export class GetQueryStatusResponse extends pb_1.Message {
         if (data.tx_hash != null) {
             message.tx_hash = data.tx_hash;
         }
+        if (data.proof != null) {
+            message.proof = data.proof;
+        }
+        if (data.proof_data != null) {
+            message.proof_data = ProofData.fromObject(data.proof_data);
+        }
+        if (data.circuit_output != null) {
+            message.circuit_output = data.circuit_output;
+        }
         return message;
     }
     toObject() {
@@ -824,6 +895,9 @@ export class GetQueryStatusResponse extends pb_1.Message {
             err?: ReturnType<typeof ErrMsg.prototype.toObject>;
             status?: QueryStatus;
             tx_hash?: string;
+            proof?: string;
+            proof_data?: ReturnType<typeof ProofData.prototype.toObject>;
+            circuit_output?: string;
         } = {};
         if (this.err != null) {
             data.err = this.err.toObject();
@@ -833,6 +907,15 @@ export class GetQueryStatusResponse extends pb_1.Message {
         }
         if (this.tx_hash != null) {
             data.tx_hash = this.tx_hash;
+        }
+        if (this.proof != null) {
+            data.proof = this.proof;
+        }
+        if (this.proof_data != null) {
+            data.proof_data = this.proof_data.toObject();
+        }
+        if (this.circuit_output != null) {
+            data.circuit_output = this.circuit_output;
         }
         return data;
     }
@@ -846,6 +929,12 @@ export class GetQueryStatusResponse extends pb_1.Message {
             writer.writeEnum(2, this.status);
         if (this.tx_hash.length)
             writer.writeString(3, this.tx_hash);
+        if (this.proof.length)
+            writer.writeString(4, this.proof);
+        if (this.has_proof_data)
+            writer.writeMessage(5, this.proof_data, () => this.proof_data.serialize(writer));
+        if (this.circuit_output.length)
+            writer.writeString(6, this.circuit_output);
         if (!w)
             return writer.getResultBuffer();
     }
@@ -863,6 +952,15 @@ export class GetQueryStatusResponse extends pb_1.Message {
                     break;
                 case 3:
                     message.tx_hash = reader.readString();
+                    break;
+                case 4:
+                    message.proof = reader.readString();
+                    break;
+                case 5:
+                    reader.readMessage(message.proof_data, () => message.proof_data = ProofData.deserialize(reader));
+                    break;
+                case 6:
+                    message.circuit_output = reader.readString();
                     break;
                 default: reader.skipField();
             }
@@ -1367,10 +1465,12 @@ export class ProofData extends pb_1.Message {
     #one_of_decls: number[][] = [];
     constructor(data?: any[] | {
         commit_hash?: string;
+        /** @deprecated*/
         vk_hash?: string;
         app_commit_hash?: string;
         app_vk_hash?: string;
         smt_root?: string;
+        dummy_input_commitment?: string;
     }) {
         super();
         pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
@@ -1390,6 +1490,9 @@ export class ProofData extends pb_1.Message {
             if ("smt_root" in data && data.smt_root != undefined) {
                 this.smt_root = data.smt_root;
             }
+            if ("dummy_input_commitment" in data && data.dummy_input_commitment != undefined) {
+                this.dummy_input_commitment = data.dummy_input_commitment;
+            }
         }
     }
     get commit_hash() {
@@ -1398,9 +1501,11 @@ export class ProofData extends pb_1.Message {
     set commit_hash(value: string) {
         pb_1.Message.setField(this, 1, value);
     }
+    /** @deprecated*/
     get vk_hash() {
         return pb_1.Message.getFieldWithDefault(this, 2, "") as string;
     }
+    /** @deprecated*/
     set vk_hash(value: string) {
         pb_1.Message.setField(this, 2, value);
     }
@@ -1422,12 +1527,19 @@ export class ProofData extends pb_1.Message {
     set smt_root(value: string) {
         pb_1.Message.setField(this, 5, value);
     }
+    get dummy_input_commitment() {
+        return pb_1.Message.getFieldWithDefault(this, 6, "") as string;
+    }
+    set dummy_input_commitment(value: string) {
+        pb_1.Message.setField(this, 6, value);
+    }
     static fromObject(data: {
         commit_hash?: string;
         vk_hash?: string;
         app_commit_hash?: string;
         app_vk_hash?: string;
         smt_root?: string;
+        dummy_input_commitment?: string;
     }): ProofData {
         const message = new ProofData({});
         if (data.commit_hash != null) {
@@ -1445,6 +1557,9 @@ export class ProofData extends pb_1.Message {
         if (data.smt_root != null) {
             message.smt_root = data.smt_root;
         }
+        if (data.dummy_input_commitment != null) {
+            message.dummy_input_commitment = data.dummy_input_commitment;
+        }
         return message;
     }
     toObject() {
@@ -1454,6 +1569,7 @@ export class ProofData extends pb_1.Message {
             app_commit_hash?: string;
             app_vk_hash?: string;
             smt_root?: string;
+            dummy_input_commitment?: string;
         } = {};
         if (this.commit_hash != null) {
             data.commit_hash = this.commit_hash;
@@ -1469,6 +1585,9 @@ export class ProofData extends pb_1.Message {
         }
         if (this.smt_root != null) {
             data.smt_root = this.smt_root;
+        }
+        if (this.dummy_input_commitment != null) {
+            data.dummy_input_commitment = this.dummy_input_commitment;
         }
         return data;
     }
@@ -1486,6 +1605,8 @@ export class ProofData extends pb_1.Message {
             writer.writeString(4, this.app_vk_hash);
         if (this.smt_root.length)
             writer.writeString(5, this.smt_root);
+        if (this.dummy_input_commitment.length)
+            writer.writeString(6, this.dummy_input_commitment);
         if (!w)
             return writer.getResultBuffer();
     }
@@ -1509,6 +1630,9 @@ export class ProofData extends pb_1.Message {
                     break;
                 case 5:
                     message.smt_root = reader.readString();
+                    break;
+                case 6:
+                    message.dummy_input_commitment = reader.readString();
                     break;
                 default: reader.skipField();
             }
@@ -1687,7 +1811,9 @@ export class Query extends pb_1.Message {
         receipt_infos?: dependency_1.ReceiptInfo[];
         storage_query_infos?: dependency_1.StorageQueryInfo[];
         transaction_infos?: dependency_1.TransactionInfo[];
-        app_circuit_info?: dependency_2.AppCirucitInfoWithProof;
+        app_circuit_info?: dependency_2.AppCircuitInfoWithProof;
+        /** @deprecated*/
+        use_plonky2?: boolean;
     }) {
         super();
         pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [1, 2, 3], this.#one_of_decls);
@@ -1703,6 +1829,9 @@ export class Query extends pb_1.Message {
             }
             if ("app_circuit_info" in data && data.app_circuit_info != undefined) {
                 this.app_circuit_info = data.app_circuit_info;
+            }
+            if ("use_plonky2" in data && data.use_plonky2 != undefined) {
+                this.use_plonky2 = data.use_plonky2;
             }
         }
     }
@@ -1725,19 +1854,28 @@ export class Query extends pb_1.Message {
         pb_1.Message.setRepeatedWrapperField(this, 3, value);
     }
     get app_circuit_info() {
-        return pb_1.Message.getWrapperField(this, dependency_2.AppCirucitInfoWithProof, 4) as dependency_2.AppCirucitInfoWithProof;
+        return pb_1.Message.getWrapperField(this, dependency_2.AppCircuitInfoWithProof, 4) as dependency_2.AppCircuitInfoWithProof;
     }
-    set app_circuit_info(value: dependency_2.AppCirucitInfoWithProof) {
+    set app_circuit_info(value: dependency_2.AppCircuitInfoWithProof) {
         pb_1.Message.setWrapperField(this, 4, value);
     }
     get has_app_circuit_info() {
         return pb_1.Message.getField(this, 4) != null;
     }
+    /** @deprecated*/
+    get use_plonky2() {
+        return pb_1.Message.getFieldWithDefault(this, 5, false) as boolean;
+    }
+    /** @deprecated*/
+    set use_plonky2(value: boolean) {
+        pb_1.Message.setField(this, 5, value);
+    }
     static fromObject(data: {
         receipt_infos?: ReturnType<typeof dependency_1.ReceiptInfo.prototype.toObject>[];
         storage_query_infos?: ReturnType<typeof dependency_1.StorageQueryInfo.prototype.toObject>[];
         transaction_infos?: ReturnType<typeof dependency_1.TransactionInfo.prototype.toObject>[];
-        app_circuit_info?: ReturnType<typeof dependency_2.AppCirucitInfoWithProof.prototype.toObject>;
+        app_circuit_info?: ReturnType<typeof dependency_2.AppCircuitInfoWithProof.prototype.toObject>;
+        use_plonky2?: boolean;
     }): Query {
         const message = new Query({});
         if (data.receipt_infos != null) {
@@ -1750,7 +1888,10 @@ export class Query extends pb_1.Message {
             message.transaction_infos = data.transaction_infos.map(item => dependency_1.TransactionInfo.fromObject(item));
         }
         if (data.app_circuit_info != null) {
-            message.app_circuit_info = dependency_2.AppCirucitInfoWithProof.fromObject(data.app_circuit_info);
+            message.app_circuit_info = dependency_2.AppCircuitInfoWithProof.fromObject(data.app_circuit_info);
+        }
+        if (data.use_plonky2 != null) {
+            message.use_plonky2 = data.use_plonky2;
         }
         return message;
     }
@@ -1759,7 +1900,8 @@ export class Query extends pb_1.Message {
             receipt_infos?: ReturnType<typeof dependency_1.ReceiptInfo.prototype.toObject>[];
             storage_query_infos?: ReturnType<typeof dependency_1.StorageQueryInfo.prototype.toObject>[];
             transaction_infos?: ReturnType<typeof dependency_1.TransactionInfo.prototype.toObject>[];
-            app_circuit_info?: ReturnType<typeof dependency_2.AppCirucitInfoWithProof.prototype.toObject>;
+            app_circuit_info?: ReturnType<typeof dependency_2.AppCircuitInfoWithProof.prototype.toObject>;
+            use_plonky2?: boolean;
         } = {};
         if (this.receipt_infos != null) {
             data.receipt_infos = this.receipt_infos.map((item: dependency_1.ReceiptInfo) => item.toObject());
@@ -1772,6 +1914,9 @@ export class Query extends pb_1.Message {
         }
         if (this.app_circuit_info != null) {
             data.app_circuit_info = this.app_circuit_info.toObject();
+        }
+        if (this.use_plonky2 != null) {
+            data.use_plonky2 = this.use_plonky2;
         }
         return data;
     }
@@ -1787,6 +1932,8 @@ export class Query extends pb_1.Message {
             writer.writeRepeatedMessage(3, this.transaction_infos, (item: dependency_1.TransactionInfo) => item.serialize(writer));
         if (this.has_app_circuit_info)
             writer.writeMessage(4, this.app_circuit_info, () => this.app_circuit_info.serialize(writer));
+        if (this.use_plonky2 != false)
+            writer.writeBool(5, this.use_plonky2);
         if (!w)
             return writer.getResultBuffer();
     }
@@ -1806,7 +1953,10 @@ export class Query extends pb_1.Message {
                     reader.readMessage(message.transaction_infos, () => pb_1.Message.addToRepeatedWrapperField(message, 3, dependency_1.TransactionInfo.deserialize(reader), dependency_1.TransactionInfo));
                     break;
                 case 4:
-                    reader.readMessage(message.app_circuit_info, () => message.app_circuit_info = dependency_2.AppCirucitInfoWithProof.deserialize(reader));
+                    reader.readMessage(message.app_circuit_info, () => message.app_circuit_info = dependency_2.AppCircuitInfoWithProof.deserialize(reader));
+                    break;
+                case 5:
+                    message.use_plonky2 = reader.readBool();
                     break;
                 default: reader.skipField();
             }

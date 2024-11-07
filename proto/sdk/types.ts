@@ -122,7 +122,7 @@ export class Field extends pb_1.Message {
     #one_of_decls: number[][] = [];
     constructor(data?: any[] | {
         contract?: string;
-        log_index?: number;
+        log_pos?: number;
         event_id?: string;
         value?: string;
         is_topic?: boolean;
@@ -134,8 +134,8 @@ export class Field extends pb_1.Message {
             if ("contract" in data && data.contract != undefined) {
                 this.contract = data.contract;
             }
-            if ("log_index" in data && data.log_index != undefined) {
-                this.log_index = data.log_index;
+            if ("log_pos" in data && data.log_pos != undefined) {
+                this.log_pos = data.log_pos;
             }
             if ("event_id" in data && data.event_id != undefined) {
                 this.event_id = data.event_id;
@@ -157,10 +157,10 @@ export class Field extends pb_1.Message {
     set contract(value: string) {
         pb_1.Message.setField(this, 1, value);
     }
-    get log_index() {
+    get log_pos() {
         return pb_1.Message.getFieldWithDefault(this, 2, 0) as number;
     }
-    set log_index(value: number) {
+    set log_pos(value: number) {
         pb_1.Message.setField(this, 2, value);
     }
     get event_id() {
@@ -189,7 +189,7 @@ export class Field extends pb_1.Message {
     }
     static fromObject(data: {
         contract?: string;
-        log_index?: number;
+        log_pos?: number;
         event_id?: string;
         value?: string;
         is_topic?: boolean;
@@ -199,8 +199,8 @@ export class Field extends pb_1.Message {
         if (data.contract != null) {
             message.contract = data.contract;
         }
-        if (data.log_index != null) {
-            message.log_index = data.log_index;
+        if (data.log_pos != null) {
+            message.log_pos = data.log_pos;
         }
         if (data.event_id != null) {
             message.event_id = data.event_id;
@@ -219,7 +219,7 @@ export class Field extends pb_1.Message {
     toObject() {
         const data: {
             contract?: string;
-            log_index?: number;
+            log_pos?: number;
             event_id?: string;
             value?: string;
             is_topic?: boolean;
@@ -228,8 +228,8 @@ export class Field extends pb_1.Message {
         if (this.contract != null) {
             data.contract = this.contract;
         }
-        if (this.log_index != null) {
-            data.log_index = this.log_index;
+        if (this.log_pos != null) {
+            data.log_pos = this.log_pos;
         }
         if (this.event_id != null) {
             data.event_id = this.event_id;
@@ -251,8 +251,8 @@ export class Field extends pb_1.Message {
         const writer = w || new pb_1.BinaryWriter();
         if (this.contract.length)
             writer.writeString(1, this.contract);
-        if (this.log_index != 0)
-            writer.writeUint32(2, this.log_index);
+        if (this.log_pos != 0)
+            writer.writeUint32(2, this.log_pos);
         if (this.event_id.length)
             writer.writeString(3, this.event_id);
         if (this.value.length)
@@ -274,7 +274,7 @@ export class Field extends pb_1.Message {
                     message.contract = reader.readString();
                     break;
                 case 2:
-                    message.log_index = reader.readUint32();
+                    message.log_pos = reader.readUint32();
                     break;
                 case 3:
                     message.event_id = reader.readString();

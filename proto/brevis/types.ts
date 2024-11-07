@@ -144,7 +144,7 @@ export class LogExtractInfo extends pb_1.Message {
     #one_of_decls: number[][] = [];
     constructor(data?: any[] | {
         contract_address?: string;
-        log_index?: number;
+        log_pos?: number;
         log_topic0?: string;
         value_from_topic?: boolean;
         value_index?: number;
@@ -157,8 +157,8 @@ export class LogExtractInfo extends pb_1.Message {
             if ("contract_address" in data && data.contract_address != undefined) {
                 this.contract_address = data.contract_address;
             }
-            if ("log_index" in data && data.log_index != undefined) {
-                this.log_index = data.log_index;
+            if ("log_pos" in data && data.log_pos != undefined) {
+                this.log_pos = data.log_pos;
             }
             if ("log_topic0" in data && data.log_topic0 != undefined) {
                 this.log_topic0 = data.log_topic0;
@@ -183,10 +183,10 @@ export class LogExtractInfo extends pb_1.Message {
     set contract_address(value: string) {
         pb_1.Message.setField(this, 1, value);
     }
-    get log_index() {
+    get log_pos() {
         return pb_1.Message.getFieldWithDefault(this, 2, 0) as number;
     }
-    set log_index(value: number) {
+    set log_pos(value: number) {
         pb_1.Message.setField(this, 2, value);
     }
     get log_topic0() {
@@ -221,7 +221,7 @@ export class LogExtractInfo extends pb_1.Message {
     }
     static fromObject(data: {
         contract_address?: string;
-        log_index?: number;
+        log_pos?: number;
         log_topic0?: string;
         value_from_topic?: boolean;
         value_index?: number;
@@ -232,8 +232,8 @@ export class LogExtractInfo extends pb_1.Message {
         if (data.contract_address != null) {
             message.contract_address = data.contract_address;
         }
-        if (data.log_index != null) {
-            message.log_index = data.log_index;
+        if (data.log_pos != null) {
+            message.log_pos = data.log_pos;
         }
         if (data.log_topic0 != null) {
             message.log_topic0 = data.log_topic0;
@@ -255,7 +255,7 @@ export class LogExtractInfo extends pb_1.Message {
     toObject() {
         const data: {
             contract_address?: string;
-            log_index?: number;
+            log_pos?: number;
             log_topic0?: string;
             value_from_topic?: boolean;
             value_index?: number;
@@ -265,8 +265,8 @@ export class LogExtractInfo extends pb_1.Message {
         if (this.contract_address != null) {
             data.contract_address = this.contract_address;
         }
-        if (this.log_index != null) {
-            data.log_index = this.log_index;
+        if (this.log_pos != null) {
+            data.log_pos = this.log_pos;
         }
         if (this.log_topic0 != null) {
             data.log_topic0 = this.log_topic0;
@@ -291,8 +291,8 @@ export class LogExtractInfo extends pb_1.Message {
         const writer = w || new pb_1.BinaryWriter();
         if (this.contract_address.length)
             writer.writeString(1, this.contract_address);
-        if (this.log_index != 0)
-            writer.writeUint64(2, this.log_index);
+        if (this.log_pos != 0)
+            writer.writeUint64(2, this.log_pos);
         if (this.log_topic0.length)
             writer.writeString(3, this.log_topic0);
         if (this.value_from_topic != false)
@@ -316,7 +316,7 @@ export class LogExtractInfo extends pb_1.Message {
                     message.contract_address = reader.readString();
                     break;
                 case 2:
-                    message.log_index = reader.readUint64();
+                    message.log_pos = reader.readUint64();
                     break;
                 case 3:
                     message.log_topic0 = reader.readString();
