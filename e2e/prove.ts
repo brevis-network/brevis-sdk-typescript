@@ -18,7 +18,7 @@ async function main() {
             fields: [
                 new Field({
                     contract: '0x88e6A0c2dDD26FEEb64F039a2c41296FcB3f5640',
-                    log_index: 3,
+                    log_pos: 3,
                     event_id: '0xc42079f94a6350d7e6235f29174924f928cc2ac818eb64fed8004e115fbcca67',
                     is_topic: false,
                     field_index: 0,
@@ -26,7 +26,7 @@ async function main() {
                 }),
                 new Field({
                     contract: '0x88e6A0c2dDD26FEEb64F039a2c41296FcB3f5640',
-                    log_index: 3,
+                    log_pos: 3,
                     event_id: '0xc42079f94a6350d7e6235f29174924f928cc2ac818eb64fed8004e115fbcca67',
                     is_topic: true,
                     field_index: 2,
@@ -34,7 +34,7 @@ async function main() {
                 }),
                 new Field({
                     contract: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
-                    log_index: 2,
+                    log_pos: 2,
                     event_id: '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef',
                     is_topic: true,
                     field_index: 1,
@@ -104,7 +104,7 @@ async function main() {
     console.log('proof', proofRes.proof);
 
     try {
-        const brevisRes = await brevis.submit(proofReq, proofRes, 1, 11155111, QueryOption.ZK_MODE, "", "");
+        const brevisRes = await brevis.submit(proofReq, proofRes, 1, 11155111, QueryOption.ZK_MODE, '', '');
         console.log('brevis res', brevisRes);
 
         brevis.wait(brevisRes.queryKey, 11155111);

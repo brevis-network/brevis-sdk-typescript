@@ -75,11 +75,11 @@ function validateReceipt(d: ReceiptData) {
 
 function validateReceiptField(d: Field, i: number) {
     const field = `receipt.field[${i}]`;
-    if (!ethers.isAddress(d.contract)) err(field + '.contract', d.contract);
-    if (d.log_index < 0) err(field + '.log_index', d.log_index);
-    if (!validLen(d.event_id)) err(field + '.event_id', d.event_id);
+    // if (!ethers.isAddress(d.contract)) err(field + '.contract', d.contract);
+    if (d.log_pos < 0) err(field + '.log_pos', d.log_pos);
+    // if (!validLen(d.event_id)) err(field + '.event_id', d.event_id);
     if (d.field_index < 0) err(field + '.field_index', d.field_index);
-    if (!validLen(d.value)) err(field + '.value', d.value);
+    // if (!validLen(d.value)) err(field + '.value', d.value);
 }
 
 function validateStorage(d: StorageData) {
