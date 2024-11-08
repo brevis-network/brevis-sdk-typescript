@@ -75,30 +75,18 @@ function validateReceipt(d: ReceiptData) {
 
 function validateReceiptField(d: Field, i: number) {
     const field = `receipt.field[${i}]`;
-    // if (!ethers.isAddress(d.contract)) err(field + '.contract', d.contract);
     if (d.log_pos < 0) err(field + '.log_pos', d.log_pos);
-    // if (!validLen(d.event_id)) err(field + '.event_id', d.event_id);
     if (d.field_index < 0) err(field + '.field_index', d.field_index);
-    // if (!validLen(d.value)) err(field + '.value', d.value);
 }
 
 function validateStorage(d: StorageData) {
     if (d.block_num < 0) err('storage.block_num', d.block_num);
     if (!ethers.isAddress(d.address)) err('storage.address', d.address);
     if (!validLen(d.slot)) err('storage.slot', d.slot);
-    if (!validLen(d.value)) err('storage.value', d.value);
 }
 
 function validateTransaction(d: TransactionData) {
     if (!validLen(d.hash)) err('transaction.hash', d.hash);
-    if (d.block_num < 0) err('transaction.block_num', d.block_num);
-    if (d.nonce < 0) err('transaction.nonce', d.nonce);
-    if (!validLen(d.gas_tip_cap_or_gas_price)) err('transaction.gas_tip_cap_or_gas_price', d.gas_tip_cap_or_gas_price);
-    if (!validLen(d.gas_fee_cap)) err('transaction.gas_fee_cap', d.gas_fee_cap);
-    if (d.gas_limit < 0) err('transaction.gas_limit', d.gas_limit);
-    if (!ethers.isAddress(d.from)) err('transaction.from', d.from);
-    if (!ethers.isAddress(d.to)) err('transaction.to', d.to);
-    if (!validLen(d.value)) err('transaction.value', d.value);
 }
 
 function validLen(d: string): boolean {

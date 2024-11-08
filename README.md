@@ -181,7 +181,7 @@ const restored = ProveResponse.deserialize(serialized);
 import { Brevis } from "brevis-sdk-typescript";
 
 // A client for interacting with Brevis' systems
-const brevis = new Brevis("appsdkv2.brevis.network:9094");
+const brevis = new Brevis("appsdkv3.brevis.network:443");
 // submit() takes
 // the proof request
 // proof response
