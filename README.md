@@ -148,8 +148,7 @@ if (proofRes.has_err) {
       // handle invalid data input...
       // this error means some of your input
       // data (receipt/storage/transaction) is not found or not supported
-      // e.g. you added a transaction of type other than 0 or 2, you added
-      // a receipt of size more than 2048 bytes...
+      // e.g. you added a transaction of type other than 0 or 2,
       break;
 
     case ErrCode.ERROR_INVALID_CUSTOM_INPUT:
@@ -181,7 +180,7 @@ const restored = ProveResponse.deserialize(serialized);
 import { Brevis } from "brevis-sdk-typescript";
 
 // A client for interacting with Brevis' systems
-const brevis = new Brevis("appsdkv2.brevis.network:9094");
+const brevis = new Brevis("appsdkv3.brevis.network:443");
 // submit() takes
 // the proof request
 // proof response

@@ -22,6 +22,7 @@ export class ProveRequest extends pb_1.Message {
         storages?: dependency_1.IndexedStorage[];
         transactions?: dependency_1.IndexedTransaction[];
         custom_input?: dependency_1.CustomInput;
+        src_chain_id?: number;
     }) {
         super();
         pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [1, 2, 3], this.#one_of_decls);
@@ -37,6 +38,9 @@ export class ProveRequest extends pb_1.Message {
             }
             if ("custom_input" in data && data.custom_input != undefined) {
                 this.custom_input = data.custom_input;
+            }
+            if ("src_chain_id" in data && data.src_chain_id != undefined) {
+                this.src_chain_id = data.src_chain_id;
             }
         }
     }
@@ -67,11 +71,18 @@ export class ProveRequest extends pb_1.Message {
     get has_custom_input() {
         return pb_1.Message.getField(this, 4) != null;
     }
+    get src_chain_id() {
+        return pb_1.Message.getFieldWithDefault(this, 5, 0) as number;
+    }
+    set src_chain_id(value: number) {
+        pb_1.Message.setField(this, 5, value);
+    }
     static fromObject(data: {
         receipts?: ReturnType<typeof dependency_1.IndexedReceipt.prototype.toObject>[];
         storages?: ReturnType<typeof dependency_1.IndexedStorage.prototype.toObject>[];
         transactions?: ReturnType<typeof dependency_1.IndexedTransaction.prototype.toObject>[];
         custom_input?: ReturnType<typeof dependency_1.CustomInput.prototype.toObject>;
+        src_chain_id?: number;
     }): ProveRequest {
         const message = new ProveRequest({});
         if (data.receipts != null) {
@@ -86,6 +97,9 @@ export class ProveRequest extends pb_1.Message {
         if (data.custom_input != null) {
             message.custom_input = dependency_1.CustomInput.fromObject(data.custom_input);
         }
+        if (data.src_chain_id != null) {
+            message.src_chain_id = data.src_chain_id;
+        }
         return message;
     }
     toObject() {
@@ -94,6 +108,7 @@ export class ProveRequest extends pb_1.Message {
             storages?: ReturnType<typeof dependency_1.IndexedStorage.prototype.toObject>[];
             transactions?: ReturnType<typeof dependency_1.IndexedTransaction.prototype.toObject>[];
             custom_input?: ReturnType<typeof dependency_1.CustomInput.prototype.toObject>;
+            src_chain_id?: number;
         } = {};
         if (this.receipts != null) {
             data.receipts = this.receipts.map((item: dependency_1.IndexedReceipt) => item.toObject());
@@ -106,6 +121,9 @@ export class ProveRequest extends pb_1.Message {
         }
         if (this.custom_input != null) {
             data.custom_input = this.custom_input.toObject();
+        }
+        if (this.src_chain_id != null) {
+            data.src_chain_id = this.src_chain_id;
         }
         return data;
     }
@@ -121,6 +139,8 @@ export class ProveRequest extends pb_1.Message {
             writer.writeRepeatedMessage(3, this.transactions, (item: dependency_1.IndexedTransaction) => item.serialize(writer));
         if (this.has_custom_input)
             writer.writeMessage(4, this.custom_input, () => this.custom_input.serialize(writer));
+        if (this.src_chain_id != 0)
+            writer.writeUint64(5, this.src_chain_id);
         if (!w)
             return writer.getResultBuffer();
     }
@@ -141,6 +161,9 @@ export class ProveRequest extends pb_1.Message {
                     break;
                 case 4:
                     reader.readMessage(message.custom_input, () => message.custom_input = dependency_1.CustomInput.deserialize(reader));
+                    break;
+                case 5:
+                    message.src_chain_id = reader.readUint64();
                     break;
                 default: reader.skipField();
             }

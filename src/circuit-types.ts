@@ -2,11 +2,21 @@ import { ethers } from 'ethers';
 
 export type CustomInput = Record<string, CircuitValue | CircuitValue[]>;
 
-export type CircuitDataType = 'Uint248' | 'Uint521' | 'Int248' | 'Bytes32';
+export type CircuitDataType = 'Uint248' | 'Uint521' | 'Int248' | 'Bytes32' | 'Uint32' | 'Uint64';
 
 export interface CircuitValue {
     type: CircuitDataType;
     data: string;
+}
+
+export function asUint32(input: string): CircuitValue {
+    const big = ethers.getBigInt(input);
+    return { type: 'Uint32', data: big.toString(10) };
+}
+
+export function asUint64(input: string): CircuitValue {
+    const big = ethers.getBigInt(input);
+    return { type: 'Uint64', data: big.toString(10) };
 }
 
 export function asUint248(input: string): CircuitValue {
