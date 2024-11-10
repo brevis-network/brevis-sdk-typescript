@@ -35,6 +35,7 @@
     },
     "dependencies": {
         "@grpc/grpc-js": "^1.10.4",
+        "braces": "^3.0.3",
         "ethers": "^6.11.1",
         "google-protobuf": "^3.21.2"
     }
