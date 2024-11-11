@@ -106,24 +106,22 @@ export class Brevis {
             const res = await this.getQueryStatus(queryKey, dstChainId);
             switch (res.status) {
                 case QueryStatus.QS_COMPLETE:
-                    console.log(`request query key ${JSON.stringify(queryKey)} success, tx ${res.tx_hash}`);
+                    console.log(`request query: proofId ${queryKey.query_hash} nonce ${queryKey.nonce} success, tx ${res.tx_hash}`);
                     return { queryKey: queryKey, tx: res.tx_hash, success: true };
                 case QueryStatus.QS_FAILED:
-                    console.log(`request query key ${JSON.stringify(queryKey)} failed`);
+                    console.log(`request query: proofId ${queryKey.query_hash} nonce ${queryKey.nonce} failed`);
                     return { queryKey: queryKey, success: false };
                 case QueryStatus.QS_TO_BE_PAID:
                     console.log(
-                        `query ${JSON.stringify(
-                            queryKey,
-                        )} waiting for payment. call BrevisRequest.sendRequest to initiate the payment`,
+                        `query: proofId ${queryKey.query_hash} nonce ${queryKey.nonce} waiting for payment. call BrevisRequest.sendRequest to initiate the payment`,
                     );
                     break;
                 default:
-                    console.log(`query ${JSON.stringify(queryKey)} waiting for final tx`);
+                    console.log(`query: proofId ${queryKey.query_hash} nonce ${queryKey.nonce} waiting for final tx`);
             }
             await new Promise(resolve => setTimeout(resolve, interval));
         }
-        console.log(`query ${JSON.stringify(queryKey)} timed out after ${interval * count} seconds`);
+        console.log(`query: proofId ${queryKey.query_hash} nonce ${queryKey.nonce}  timed out after ${interval * count} seconds`);
         return { queryKey: queryKey, success: false };
     }
 
@@ -189,10 +187,15 @@ export class Brevis {
                         output_commitment: circuitInfo.output_commitment,
                         vk_hash: circuitInfo.vk_hash,
                         input_commitments: circuitInfo.input_commitments,
-                        toggles_commitment: circuitInfo.toggles_commitment,
                         toggles: circuitInfo.toggles,
                         output: circuitInfo.output,
                         callback_addr: callbackAddress,
+                        input_commitments_root: circuitInfo.input_commitments_root,
+                        witness: circuitInfo.witness,
+                        max_receipts: circuitInfo.max_receipts,
+                        max_storage: circuitInfo.max_storage,
+                        max_tx: circuitInfo.max_tx,
+                        max_num_data_points: circuitInfo.max_num_data_points,
                     }),
                 }),
             ],
