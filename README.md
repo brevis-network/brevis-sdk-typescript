@@ -31,26 +31,24 @@ Adding data is almost a one-to-one copy of how you would add data to prove in th
 ```typescript
 proofReq.addReceipt(
     new ReceiptData({
-        tx_hash: '0xd45d48f608a3418a64ca4ecde4acc6e05bfe59335a2c509e11cda9c3d8b39d74',
+        tx_hash: '0x53b37ec7975d217295f4bdadf8043b261fc49dccc16da9b9fc8b9530845a5794',
         fields: [
             new Field({
-                log_pos: 0,
+                log_pos: 3,
                 is_topic: false,
                 field_index: 0,
             }),
+            new Field({
+                log_pos: 3,
+                is_topic: true,
+                field_index: 2,
+            }),
+            new Field({
+                log_pos: 2,
+                is_topic: true,
+                field_index: 1,
+            }),
         ],
-    }),
-);
-proofReq.addStorage(
-    new StorageData({
-        block_num: 18233760,
-        address: '0x5427FEFA711Eff984124bFBB1AB6fbf5E3DA1820',
-        slot: '0x0000000000000000000000000000000000000000000000000000000000000000',
-    }),
-);
-proofReq.addTransaction(
-    new TransactionData({
-        hash: '0x6dc75e61220cc775aafa17796c20e49ac08030020fce710e3e546aa4e003454c',
     }),
 );
 ```
